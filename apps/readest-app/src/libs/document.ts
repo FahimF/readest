@@ -80,7 +80,8 @@ export interface BookDoc {
     description?: string;
     subject?: string[];
     identifier?: string;
-    belongsTo?: SeriesWrapper;
+    belongsTo?: any;
+    // belongsTo?: SeriesWrapper;
   };
   dir: string;
   toc?: Array<TOCItem>;

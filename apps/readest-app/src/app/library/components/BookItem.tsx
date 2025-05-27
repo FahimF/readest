@@ -16,6 +16,7 @@ import { useResponsiveSize } from '@/hooks/useResponsiveSize';
 import { useSettingsStore } from '@/store/settingsStore';
 import { LibraryViewModeType } from '@/types/settings';
 import { navigateToLogin } from '@/utils/nav';
+// import { formatAuthors, formatSeries, objectToString } from '@/utils/book';
 import { formatAuthors, formatSeries } from '@/utils/book';
 import ReadingProgress from './ReadingProgress';
 import BookCover from '@/components/BookCover';
@@ -135,6 +136,7 @@ const BookItem: React.FC<BookItemProps> = ({
           {mode === 'list' && (
             <p className='text-neutral-content line-clamp-1 text-sm'>
                 {formatSeries(bookMeta.belongsTo)}
+                {/* - {objectToString(bookMeta.belongsTo)} */}
             </p>
             )}
         </div>

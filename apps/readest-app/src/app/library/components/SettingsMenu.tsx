@@ -227,10 +227,10 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({ setIsDropdownOpen }) => {
       />
       <MenuItem label={_('Reload Page')} onClick={handleReloadPage} />
       <hr className='border-base-200 my-1' />
-      {isWebAppPlatform() && <MenuItem label={_('Download Readest')} onClick={downloadReadest} />}
-      <MenuItem label={_('About Readest')} onClick={showAboutReadest} />
+      {isWebAppPlatform() && <MenuItem label={_('Download Ook')} onClick={downloadReadest} />}
+      <MenuItem label={_('About Ook')} onClick={showAboutReadest} />
       <MenuItem
-        label={_('Help improve Readest')}
+        label={_('Help improve Ook')}
         description={isTelemetryEnabled ? _('Sharing anonymized statistics') : ''}
         Icon={isTelemetryEnabled ? MdCheck : undefined}
         onClick={toggleTelemetry}

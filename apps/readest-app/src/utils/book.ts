@@ -1,4 +1,4 @@
-import { EXTS, SeriesWrapper } from '@/libs/document';
+import { EXTS } from '@/libs/document';
 import { Book, BookConfig, BookProgress, WritingMode } from '@/types/book';
 import { getUserLang, isContentURI, isValidURL, makeSafeFilename } from './misc';
 import { getStorageType } from './object';
@@ -142,10 +142,50 @@ export const formatSubject = (subject: string | string[] | undefined) => {
   return Array.isArray(subject) ? subject.join(', ') : subject;
 };
 
-export const formatSeries = (series: SeriesWrapper | null | undefined) => {
+export function objectToString<T extends Record<string, unknown>>(obj: T | null | undefined, indent: string = ''): string {
+    if (!obj) return '';    
+    const results: string[] = [];    
+    for (const [key, value] of Object.entries(obj)) {
+        if (value === null || value === undefined) {
+            results.push(`${indent}${key}: ${value}`);
+        } else if (typeof value === 'object' && !Array.isArray(value)) {
+            // Recursively handle nested objects
+            results.push(`${indent}${key}:`);
+            const nestedResult = objectToString(value as Record<string, unknown>, indent + '  ');
+            if (nestedResult) {
+              results.push(nestedResult);
+            }
+        } else if (Array.isArray(value)) {
+            // Handle arrays
+            results.push(`${indent}${key}: [${value.join(', ')}]`);
+        } else {
+            // Handle primitive values
+            results.push(`${indent}${key}: ${value}`);
+        }
+    }    
+    return results.join('\n');
+}
+  
+export const formatSeries = (series: any | null | undefined) => {
     if (!series) return '';
+    // Does the object have a series property?
+    let obj;
+    if (!series['series']) {
+        // Is there legacy series info?
+        if (series['legacy']) {
+            obj = series['legacy'];
+        } else {
+            return '';
+        }
+    } else {
+        obj = series['series']
+    }
+    // Does the series object have a name property?
+    if (!obj['name']) {
+        // Return all keys of the series object
+        return Object.keys(obj);
+    }
     // Get series name and position from object
-    const obj = series['series'];
     const name = obj['name'];
     const position = obj['position'];
     return `${name} #${position}`;

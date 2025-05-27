@@ -85,7 +85,7 @@ const BookMenu: React.FC<BookMenuProps> = ({ menuClassName, setIsDropdownOpen })
       <MenuItem label={_('Reload Page')} noIcon shortcut='Shift+R' onClick={handleReloadPage} />
       <hr className='border-base-200 my-1' />
       {isWebApp && <MenuItem label={_('Download Readest')} noIcon onClick={downloadReadest} />}
-      <MenuItem label={_('About Readest')} noIcon onClick={showAboutReadest} />
+      <MenuItem label={_('About Ook')} noIcon onClick={showAboutReadest} />
     </div>
   );
 };
