@@ -59,6 +59,15 @@ export interface SectionItem {
   location?: Location;
 }
 
+interface SeriesData {
+    name: string;
+    position: number;
+}
+  
+export interface SeriesWrapper {
+    series: SeriesData;
+}
+
 export interface BookDoc {
   metadata: {
     // NOTE: the title and author fields should be formatted
@@ -71,6 +80,7 @@ export interface BookDoc {
     description?: string;
     subject?: string[];
     identifier?: string;
+    belongsTo?: SeriesWrapper;
   };
   dir: string;
   toc?: Array<TOCItem>;

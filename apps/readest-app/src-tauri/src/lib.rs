@@ -268,7 +268,7 @@ pub fn run() {
                     .decorations(false)
                     .transparent(true)
                     .visible(false)
-                    .title("Readest");
+                    .title("Ook");
 
                 if cfg!(target_os = "windows") {
                     if tauri_plugin_os::version()

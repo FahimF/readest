@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
 import { MdCheckCircle, MdCheckCircleOutline } from 'react-icons/md';
 import {
   LiaCloudUploadAltSolid,
@@ -7,15 +8,18 @@ import {
 } from 'react-icons/lia';
 
 import { Book } from '@/types/book';
+import { BookDoc } from '@/libs/document';
 import { useEnv } from '@/context/EnvContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useResponsiveSize } from '@/hooks/useResponsiveSize';
+import { useSettingsStore } from '@/store/settingsStore';
 import { LibraryViewModeType } from '@/types/settings';
 import { navigateToLogin } from '@/utils/nav';
-import { formatAuthors } from '@/utils/book';
+import { formatAuthors, formatSeries } from '@/utils/book';
 import ReadingProgress from './ReadingProgress';
 import BookCover from '@/components/BookCover';
+import Spinner from '@/components/Spinner';
 
 interface BookItemProps {
   mode: LibraryViewModeType;
@@ -42,11 +46,40 @@ const BookItem: React.FC<BookItemProps> = ({
   const { user } = useAuth();
   const { appService } = useEnv();
   const iconSize15 = useResponsiveSize(15);
+  const { envConfig } = useEnv();
+  const { settings } = useSettingsStore();
+  const [loading, setLoading] = useState(false);
+  const [bookMeta, setBookMeta] = useState<BookDoc['metadata'] | null>(null);
+
+  useEffect(() => {
+    const loadingTimeout = setTimeout(() => setLoading(true), 300);
+    const fetchBookDetails = async () => {
+      const appService = await envConfig.getAppService();
+      try {
+        const details = await appService.fetchBookDetails(book, settings);
+        setBookMeta(details);
+      } finally {
+        if (loadingTimeout) clearTimeout(loadingTimeout);
+        setLoading(false);
+      }
+    };
+    fetchBookDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [book]);
 
   const stopEvent = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
   };
+
+  if (!bookMeta)
+    return (
+      loading && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center'>
+          <Spinner loading />
+        </div>
+      )
+    );
 
   return (
     <div
@@ -99,6 +132,11 @@ const BookItem: React.FC<BookItemProps> = ({
               {formatAuthors(book.author, book.primaryLanguage) || ''}
             </p>
           )}
+          {mode === 'list' && (
+            <p className='text-neutral-content line-clamp-1 text-sm'>
+                {formatSeries(bookMeta.belongsTo)}
+            </p>
+            )}
         </div>
         <div
           className={clsx('flex items-center', book.progress ? 'justify-between' : 'justify-end')}

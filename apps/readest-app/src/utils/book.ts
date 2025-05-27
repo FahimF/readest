@@ -1,4 +1,4 @@
-import { EXTS } from '@/libs/document';
+import { EXTS, SeriesWrapper } from '@/libs/document';
 import { Book, BookConfig, BookProgress, WritingMode } from '@/types/book';
 import { getUserLang, isContentURI, isValidURL, makeSafeFilename } from './misc';
 import { getStorageType } from './object';
@@ -142,6 +142,15 @@ export const formatSubject = (subject: string | string[] | undefined) => {
   return Array.isArray(subject) ? subject.join(', ') : subject;
 };
 
+export const formatSeries = (series: SeriesWrapper | null | undefined) => {
+    if (!series) return '';
+    // Get series name and position from object
+    const obj = series['series'];
+    const name = obj['name'];
+    const position = obj['position'];
+    return `${name} #${position}`;
+};
+  
 export const formatFileSize = (size: number | null) => {
   if (size === null) return '';
   const formatter = new Intl.NumberFormat('en', {
