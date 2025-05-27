@@ -278,7 +278,7 @@ const Bookshelf: React.FC<BookshelfProps> = ({
 
     return (
         <div className='bookshelf'>
-            <div className={clsx('sm:px-6 font-semibold text-sm')}>{bookCount()}</div>
+            <div className={clsx('sm:px-6 px-4 font-semibold text-sm')}>{bookCount()}</div>
             <div
                 className={clsx(
                     'transform-wrapper',
